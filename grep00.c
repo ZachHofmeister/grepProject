@@ -168,7 +168,7 @@ int main(int argc, char *argv[]) {
 	oldintr = signal(SIGINT, SIG_IGN);
 	if (signal(SIGTERM, SIG_IGN) == SIG_DFL) signal(SIGTERM, quit);
 	argv++;
-	//TODO: these lines (following while and if statement) can safely go
+	//TODO: these lines (following while and if statement) can safely go 
 	while (argc > 1 && **argv=='-') { //Finds flags
 		switch((*argv)[1]) {
 			case '\0':		vflag = 0;									break;
