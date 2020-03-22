@@ -9,7 +9,7 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${fileDirname}/${fileBasenameNoExtension}",
-			"args": ["edtest.txt", "<", "testinputed.txt"],
+			"args": ["edtest.txt"],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [],
@@ -20,7 +20,10 @@
 					"description": "Enable pretty-printing for gdb",
 					"text": "-enable-pretty-printing",
 					"ignoreFailures": true
-				}
+				},
+				{
+                    "text": "settings set target.input-path in.txt"
+                }
 			],
 			"preLaunchTask": "clang build active file",
 			"miDebuggerPath": "/usr/bin/lldb-mi"
