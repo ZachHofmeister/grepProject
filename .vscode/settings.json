@@ -22,6 +22,13 @@
 		"string": "c",
 		"string_view": "c",
 		"functional": "c",
-		"typeinfo": "c"
+		"typeinfo": "c",
+		"optional": "c",
+		"random": "c",
+		"new": "c",
+		"type_traits": "c",
+		"utility": "c",
+		"memory": "c",
+		"atomic": "c"
 	}
 }

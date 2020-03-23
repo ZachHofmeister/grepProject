@@ -1,3 +1,4 @@
 g/more
 g/[hH]ere
+g/tex.
 q
