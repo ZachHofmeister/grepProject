@@ -1,0 +1,23 @@
+int	open(char *, int);
+int	read(int, char*, int);
+int	write(int, char*, int);
+int	close(int);
+int printf(const char *, ...);
+
+char *getblock(unsigned int atl);
+char *getline(unsigned int tl);
+int advance(char *lp, char *ep);
+int append(unsigned int *a);
+int backref(int i, char *lp);
+int cclass(char *set, int c, int af);
+void commands(void);
+void compile(int eof);
+int execute(unsigned int *addr);
+void exfile(void);
+int getchr(void);
+int getfile(void);
+void global(int k);
+void print(void);
+void putchr(int ac);
+int putline(void);
+void puts(char *sp);
