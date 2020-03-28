@@ -8,8 +8,8 @@
 echo -e "Removing previously compiled code..."
 rm grep
 
-echo -e "Compiling grep05.c..."
-clang grep05.c -g -o grep
+echo -e "Compiling grep06.c..."
+clang grep06.c -g -o grep
 
 echo -e "\nRunning: ./grep [cC]ar edtest.txt in.txt"
 ./grep [cC]ar edtest.txt in.txt
