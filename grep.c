@@ -3,7 +3,6 @@
 #include <setjmp.h>
 #include <stdlib.h>
 #include <string.h>
-
 #define	BLKSIZE	4096
 #define	NBRA	5
 #define	EOF		-1
@@ -19,11 +18,9 @@
 #define	CBACK	14
 #define	CCIRC	15
 #define	STAR	01
-
 int peekc, lastc, ninbuf, io, tline, nbra, files;
 char file[BLKSIZE], linebuf[BLKSIZE], expbuf[BLKSIZE], genbuf[BLKSIZE], obuff[BLKSIZE], *nextip, *globp, *loc1, *loc2, *braslist[NBRA], *braelist[NBRA], regex[BLKSIZE], *regexp;
 unsigned int *addr1, *addr2, *dot, *dol, *zero;
-
 int main(int argc, char *argv[]) {
 	argv++;
 	if (argc > 1) {
@@ -41,7 +38,6 @@ int main(int argc, char *argv[]) {
 	}
 	return 0;
 }
-
 void commands(void) {
 	for (;;) {
 		addr1 = addr2 = dot;
@@ -61,7 +57,6 @@ void commands(void) {
 		}
 	}
 }
-
 void print(void) {
 	if (files > 1) {
 		puts(file);
@@ -244,11 +239,17 @@ void compile(int eof) { //reads characters from input as a regex expression
 			case '.': *ep++ = CDOT;
 				continue;
 			case '\n': return;
-			case '*': if (lastep==0 || *lastep==CBRA || *lastep==CKET) goto defchar;
-				*lastep |= STAR;
+			case '*':
+				if (lastep==0 || *lastep==CBRA || *lastep==CKET) {
+					*ep++ = CCHR;
+					*ep++ = c;
+				} else *lastep |= STAR;
 				continue;
-			case '$': if ((peekc=getchr()) != eof && peekc!='\n') goto defchar;
-				*ep++ = CDOL;
+			case '$':
+				if ((peekc=getchr()) != eof && peekc!='\n') {
+					*ep++ = CCHR;
+					*ep++ = c;
+				} else *ep++ = CDOL;
 				continue;
 			case '[':
 				*ep++ = CCL;
@@ -276,7 +277,7 @@ void compile(int eof) { //reads characters from input as a regex expression
 				} while ((c = getchr()) != ']');
 				lastep[1] = cclcnt;
 				continue;
-			default: defchar: *ep++ = CCHR;
+			default: *ep++ = CCHR;
 				*ep++ = c;
 		}
 	}
@@ -306,9 +307,9 @@ int execute(unsigned int *addr) {
 }
 
 int advance(char *lp, char *ep) {
-	char *curlp;
+	char *curlp, c;
 	int i;
-	for (;;) switch (*ep++) {
+	for (;;) switch (c = *ep++) {
 		case CCHR: if (*ep++ == *lp++) continue;
 			return(0);
 		case CDOT: if (*lp++) continue;
@@ -348,18 +349,18 @@ int advance(char *lp, char *ep) {
 			}
 			continue;
 		case CDOT|STAR: curlp = lp;
-			while (*lp++) {}
-			goto star;
-		case CCHR|STAR: curlp = lp;
-			while (*lp++ == *ep) {}
-			ep++;
-			goto star;
+			while (*lp++) {} //Fall through
+		case CCHR|STAR: if (c != (CDOT|STAR)) {
+				curlp = lp;
+				while (*lp++ == *ep) {}
+				ep++;
+			}
 		case CCL|STAR:
-		case NCCL|STAR: curlp = lp;
-			while (cclass(ep, *lp++, ep[-1]==(CCL|STAR))) {}
-			ep += *ep;
-			goto star;
-		star:
+		case NCCL|STAR: if ((c != (CDOT|STAR)) && (c != (CCHR|STAR))) {
+				curlp = lp;
+				while (cclass(ep, *lp++, ep[-1]==(CCL|STAR))) {}
+				ep += *ep;
+			}
 			do {
 				lp--;
 				if (advance(lp, ep)) return(1);
