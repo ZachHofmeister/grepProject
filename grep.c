@@ -184,12 +184,8 @@ void global(int k) {
 }
 
 void compile(int eof) { //reads characters from input as a regex expression
-	int c;
-	char *ep;
-	char *lastep;
-	char bracket[NBRA], *bracketp;
-	int cclcnt;
-
+	int c, cclcnt;
+	char *ep, *lastep, bracket[NBRA], *bracketp;
 	ep = expbuf;
 	bracketp = bracket;
 	if ((c = getchr()) == '\n') {
